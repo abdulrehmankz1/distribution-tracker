@@ -10,17 +10,35 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 
+import Products from './collections/Products'
+import Dealers from './collections/Dealers'
+import Drivers from './collections/Drivers'
+import Vehicles from './collections/Vehicles'
+import Trips from './collections/Trips'
+import Expenses from './collections/Expenses'
+import Inventory from './collections/Inventory'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    user: Users.slug,
+    user: 'users', // Explicitly reference 'users' for admin collection
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [
+    Users,
+    Media,
+    Products,
+    Dealers,
+    Drivers,
+    Vehicles,
+    Trips,
+    Expenses,
+    Inventory,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
