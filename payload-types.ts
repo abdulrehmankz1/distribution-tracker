@@ -73,6 +73,7 @@ export interface Config {
     dealers: Dealer;
     drivers: Driver;
     vehicles: Vehicle;
+    employees: Employee;
     trips: Trip;
     expenses: Expense;
     inventory: Inventory;
@@ -88,6 +89,7 @@ export interface Config {
     dealers: DealersSelect<false> | DealersSelect<true>;
     drivers: DriversSelect<false> | DriversSelect<true>;
     vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
+    employees: EmployeesSelect<false> | EmployeesSelect<true>;
     trips: TripsSelect<false> | TripsSelect<true>;
     expenses: ExpensesSelect<false> | ExpensesSelect<true>;
     inventory: InventorySelect<false> | InventorySelect<true>;
@@ -222,14 +224,30 @@ export interface Vehicle {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees".
+ */
+export interface Employee {
+  id: string;
+  name: string;
+  cnic: string;
+  phone: string;
+  role: 'driver' | 'helper' | 'data_entry' | 'office_boy' | 'admin' | 'other';
+  address?: string | null;
+  joiningDate?: string | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "trips".
  */
 export interface Trip {
   id: string;
   tripId: string;
   date: string;
-  driver: string | Driver;
-  helper?: (string | null) | Driver;
+  driver: string | Employee;
+  helper?: (string | null) | Employee;
   vehicle: string | Vehicle;
   fromLocation: string;
   toLocation: string | Dealer;
@@ -314,6 +332,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'vehicles';
         value: string | Vehicle;
+      } | null)
+    | ({
+        relationTo: 'employees';
+        value: string | Employee;
       } | null)
     | ({
         relationTo: 'trips';
@@ -452,6 +474,21 @@ export interface VehiclesSelect<T extends boolean = true> {
   vehicleType?: T;
   fuelType?: T;
   average?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees_select".
+ */
+export interface EmployeesSelect<T extends boolean = true> {
+  name?: T;
+  cnic?: T;
+  phone?: T;
+  role?: T;
+  address?: T;
+  joiningDate?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }

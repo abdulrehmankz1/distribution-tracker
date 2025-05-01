@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload';
+import { CollectionConfig } from 'payload'
 
 const Vehicles: CollectionConfig = {
   slug: 'vehicles',
@@ -6,11 +6,7 @@ const Vehicles: CollectionConfig = {
     useAsTitle: 'vehicleNumber',
   },
   fields: [
-    {
-      name: 'vehicleNumber',
-      type: 'text',
-      required: true,
-    },
+    { name: 'vehicleNumber', type: 'text', required: true },
     {
       name: 'vehicleType',
       type: 'select',
@@ -22,12 +18,8 @@ const Vehicles: CollectionConfig = {
       type: 'select',
       options: ['Petrol', 'Diesel', 'CNG'],
     },
-    {
-      name: 'average',
-      type: 'number',
-      required: true,
-    },
+    { name: 'average', type: 'number', required: true },
   ],
-};
+}
 
-export default Vehicles;
+export default Vehicles
