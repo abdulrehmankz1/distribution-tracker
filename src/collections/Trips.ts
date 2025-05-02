@@ -34,16 +34,15 @@ const Trips: CollectionConfig = {
         {
           name: 'driver',
           type: 'relationship',
-          relationTo: 'employees', // No need for an array, just the string 'employees'
+          relationTo: 'employees',
           required: true,
         },
         {
           name: 'helper',
           type: 'relationship',
-          relationTo: 'employees', // Same fix here
+          relationTo: 'employees', 
           required: false,
         },
-        ,
       ],
     },
     {
