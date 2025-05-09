@@ -258,10 +258,6 @@ export interface Trip {
         id?: string | null;
       }[]
     | null;
-  startTime?: string | null;
-  endTime?: string | null;
-  kmStart?: number | null;
-  kmEnd?: number | null;
   notes?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -511,10 +507,6 @@ export interface TripsSelect<T extends boolean = true> {
         quantity?: T;
         id?: T;
       };
-  startTime?: T;
-  endTime?: T;
-  kmStart?: T;
-  kmEnd?: T;
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
