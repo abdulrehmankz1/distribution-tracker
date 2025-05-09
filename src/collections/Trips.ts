@@ -13,7 +13,7 @@ const Trips: CollectionConfig = {
           data.tripId = `TRIP-${uuidv4().split('-')[0].toUpperCase()}`
         }
         return data
-      }
+      },
     ],
   },
   fields: [
@@ -36,12 +36,18 @@ const Trips: CollectionConfig = {
           type: 'relationship',
           relationTo: 'employees',
           required: true,
+          filterOptions: () => ({
+            role: { equals: 'driver' },
+          }),
         },
         {
           name: 'helper',
           type: 'relationship',
-          relationTo: 'employees', 
+          relationTo: 'employees',
           required: false,
+          filterOptions: () => ({
+            role: { equals: 'helper' },
+          }),
         },
       ],
     },
@@ -86,18 +92,7 @@ const Trips: CollectionConfig = {
     },
     {
       type: 'row',
-      fields: [
-        { name: 'startTime', type: 'text' },
-        { name: 'endTime', type: 'text' },
-        { name: 'kmStart', type: 'number' },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'kmEnd', type: 'number' },
-        { name: 'notes', type: 'textarea' },
-      ],
+      fields: [{ name: 'notes', type: 'textarea' }],
     },
   ],
 }
