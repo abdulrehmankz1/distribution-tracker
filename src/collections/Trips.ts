@@ -25,12 +25,31 @@ const Trips: CollectionConfig = {
           type: 'text',
           required: true,
           unique: true,
+          admin: {
+            readOnly: true,
+          },
         },
         {
           name: 'date',
           type: 'date',
           required: true,
         },
+        {
+          name: 'tripStatus',
+          type: 'select',
+          required: true,
+          defaultValue: 'pending',
+          options: [
+            { label: 'Pending', value: 'pending' },
+            { label: 'In Progress', value: 'in_progress' },
+            { label: 'Complete', value: 'complete' },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
         {
           name: 'driver',
           type: 'relationship',
@@ -92,7 +111,12 @@ const Trips: CollectionConfig = {
     },
     {
       type: 'row',
-      fields: [{ name: 'notes', type: 'textarea' }],
+      fields: [
+        {
+          name: 'notes',
+          type: 'textarea',
+        },
+      ],
     },
   ],
 }
