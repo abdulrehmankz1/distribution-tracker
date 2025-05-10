@@ -216,9 +216,8 @@ export interface Driver {
 export interface Vehicle {
   id: string;
   vehicleNumber: string;
-  vehicleType: 'Suzuki' | 'Mazda' | 'Truck' | 'Other';
-  fuelType?: ('Petrol' | 'Diesel' | 'CNG') | null;
-  average: number;
+  vehicleType: 'Bike' | 'Suzuki' | 'Mazda' | 'Truck' | 'Loader Rickshaw' | 'Other';
+  fuelType?: ('Petrol' | 'Diesel' | 'CNG' | 'Electric') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -246,6 +245,7 @@ export interface Trip {
   id: string;
   tripId: string;
   date: string;
+  tripStatus: 'pending' | 'in_progress' | 'complete';
   driver: string | Employee;
   helper?: (string | null) | Employee;
   vehicle: string | Vehicle;
@@ -469,7 +469,6 @@ export interface VehiclesSelect<T extends boolean = true> {
   vehicleNumber?: T;
   vehicleType?: T;
   fuelType?: T;
-  average?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -495,6 +494,7 @@ export interface EmployeesSelect<T extends boolean = true> {
 export interface TripsSelect<T extends boolean = true> {
   tripId?: T;
   date?: T;
+  tripStatus?: T;
   driver?: T;
   helper?: T;
   vehicle?: T;
