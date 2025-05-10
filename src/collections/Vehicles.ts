@@ -6,19 +6,22 @@ const Vehicles: CollectionConfig = {
     useAsTitle: 'vehicleNumber',
   },
   fields: [
-    { name: 'vehicleNumber', type: 'text', required: true },
+    {
+      name: 'vehicleNumber',
+      type: 'text',
+      required: true,
+    },
     {
       name: 'vehicleType',
       type: 'select',
-      options: ['Suzuki', 'Mazda', 'Truck', 'Other'],
+      options: ['Bike', 'Suzuki', 'Mazda', 'Truck', 'Loader Rickshaw', 'Other'],
       required: true,
     },
     {
       name: 'fuelType',
       type: 'select',
-      options: ['Petrol', 'Diesel', 'CNG'],
+      options: ['Petrol', 'Diesel', 'CNG', 'Electric'],
     },
-    { name: 'average', type: 'number', required: true },
   ],
 }
 
