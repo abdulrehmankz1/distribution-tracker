@@ -71,7 +71,6 @@ export interface Config {
     media: Media;
     products: Product;
     dealers: Dealer;
-    drivers: Driver;
     vehicles: Vehicle;
     employees: Employee;
     trips: Trip;
@@ -87,7 +86,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     dealers: DealersSelect<false> | DealersSelect<true>;
-    drivers: DriversSelect<false> | DriversSelect<true>;
     vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
     employees: EmployeesSelect<false> | EmployeesSelect<true>;
     trips: TripsSelect<false> | TripsSelect<true>;
@@ -192,20 +190,6 @@ export interface Dealer {
   contactPerson?: string | null;
   phone: string;
   area?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drivers".
- */
-export interface Driver {
-  id: string;
-  name: string;
-  cnic?: string | null;
-  phone: string;
-  vehicleNumber?: string | null;
-  vehicleType?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -320,10 +304,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'dealers';
         value: string | Dealer;
-      } | null)
-    | ({
-        relationTo: 'drivers';
-        value: string | Driver;
       } | null)
     | ({
         relationTo: 'vehicles';
@@ -445,19 +425,6 @@ export interface DealersSelect<T extends boolean = true> {
   contactPerson?: T;
   phone?: T;
   area?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drivers_select".
- */
-export interface DriversSelect<T extends boolean = true> {
-  name?: T;
-  cnic?: T;
-  phone?: T;
-  vehicleNumber?: T;
-  vehicleType?: T;
   updatedAt?: T;
   createdAt?: T;
 }
