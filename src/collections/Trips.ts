@@ -51,6 +51,22 @@ const Trips: CollectionConfig = {
       type: 'row',
       fields: [
         {
+          name: 'fromLocation',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'toLocation',
+          type: 'relationship',
+          relationTo: 'dealers',
+          required: true,
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
           name: 'driver',
           type: 'relationship',
           relationTo: 'employees',
@@ -74,21 +90,30 @@ const Trips: CollectionConfig = {
       type: 'row',
       fields: [
         {
+          name: 'vehicleType',
+          type: 'select',
+          options: ['Bike', 'Suzuki', 'Mazda', 'Truck', 'Loader Rickshaw', 'Other'],
+          required: true,
+        },
+        {
           name: 'vehicle',
           type: 'relationship',
           relationTo: 'vehicles',
           required: true,
-        },
-        {
-          name: 'fromLocation',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'toLocation',
-          type: 'relationship',
-          relationTo: 'dealers',
-          required: true,
+          admin: {
+            condition: (_, siblingData) => Boolean(siblingData?.vehicleType),
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          filterOptions: ({ siblingData }: any) => {
+            if (siblingData?.vehicleType) {
+              return {
+                vehicleType: {
+                  equals: siblingData.vehicleType,
+                },
+              }
+            }
+            return true
+          },
         },
       ],
     },
