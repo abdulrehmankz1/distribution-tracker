@@ -230,11 +230,12 @@ export interface Trip {
   tripId: string;
   date: string;
   tripStatus: 'pending' | 'in_progress' | 'complete';
-  driver: string | Employee;
-  helper?: (string | null) | Employee;
-  vehicle: string | Vehicle;
   fromLocation: string;
   toLocation: string | Dealer;
+  driver: string | Employee;
+  helper?: (string | null) | Employee;
+  vehicleType: 'Bike' | 'Suzuki' | 'Mazda' | 'Truck' | 'Loader Rickshaw' | 'Other';
+  vehicle?: (string | null) | Vehicle;
   deliveredItems?:
     | {
         product: string | Product;
@@ -462,11 +463,12 @@ export interface TripsSelect<T extends boolean = true> {
   tripId?: T;
   date?: T;
   tripStatus?: T;
-  driver?: T;
-  helper?: T;
-  vehicle?: T;
   fromLocation?: T;
   toLocation?: T;
+  driver?: T;
+  helper?: T;
+  vehicleType?: T;
+  vehicle?: T;
   deliveredItems?:
     | T
     | {
