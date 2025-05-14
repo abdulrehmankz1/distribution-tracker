@@ -9,7 +9,6 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import Products from './collections/Products'
 import Dealers from './collections/Dealers'
-import Drivers from './collections/Drivers'
 import Vehicles from './collections/Vehicles'
 import Trips from './collections/Trips'
 import Expenses from './collections/Expenses'
@@ -31,7 +30,6 @@ export default buildConfig({
     Media,
     Products,
     Dealers,
-    Drivers,
     Vehicles,
     Employees,
     Trips,
