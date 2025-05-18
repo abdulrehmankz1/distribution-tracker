@@ -71,7 +71,6 @@ export interface Config {
     media: Media;
     products: Product;
     dealers: Dealer;
-    drivers: Driver;
     vehicles: Vehicle;
     employees: Employee;
     trips: Trip;
@@ -87,7 +86,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     dealers: DealersSelect<false> | DealersSelect<true>;
-    drivers: DriversSelect<false> | DriversSelect<true>;
     vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
     employees: EmployeesSelect<false> | EmployeesSelect<true>;
     trips: TripsSelect<false> | TripsSelect<true>;
@@ -197,20 +195,6 @@ export interface Dealer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drivers".
- */
-export interface Driver {
-  id: string;
-  name: string;
-  cnic?: string | null;
-  phone: string;
-  vehicleNumber?: string | null;
-  vehicleType?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "vehicles".
  */
 export interface Vehicle {
@@ -246,11 +230,12 @@ export interface Trip {
   tripId: string;
   date: string;
   tripStatus: 'pending' | 'in_progress' | 'complete';
-  driver: string | Employee;
-  helper?: (string | null) | Employee;
-  vehicle: string | Vehicle;
   fromLocation: string;
   toLocation: string | Dealer;
+  driver: string | Employee;
+  helper?: (string | null) | Employee;
+  vehicleType: 'Bike' | 'Suzuki' | 'Mazda' | 'Truck' | 'Loader Rickshaw' | 'Other';
+  vehicle?: (string | null) | Vehicle;
   deliveredItems?:
     | {
         product: string | Product;
@@ -320,10 +305,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'dealers';
         value: string | Dealer;
-      } | null)
-    | ({
-        relationTo: 'drivers';
-        value: string | Driver;
       } | null)
     | ({
         relationTo: 'vehicles';
@@ -450,19 +431,6 @@ export interface DealersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drivers_select".
- */
-export interface DriversSelect<T extends boolean = true> {
-  name?: T;
-  cnic?: T;
-  phone?: T;
-  vehicleNumber?: T;
-  vehicleType?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "vehicles_select".
  */
 export interface VehiclesSelect<T extends boolean = true> {
@@ -495,11 +463,12 @@ export interface TripsSelect<T extends boolean = true> {
   tripId?: T;
   date?: T;
   tripStatus?: T;
-  driver?: T;
-  helper?: T;
-  vehicle?: T;
   fromLocation?: T;
   toLocation?: T;
+  driver?: T;
+  helper?: T;
+  vehicleType?: T;
+  vehicle?: T;
   deliveredItems?:
     | T
     | {
