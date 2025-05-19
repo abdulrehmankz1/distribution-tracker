@@ -8,10 +8,38 @@ const Trips: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data }) => {
+      async ({ data, req }) => {
+        // Generate tripId if not present
         if (data && !data.tripId) {
           data.tripId = `TRIP-${uuidv4().split('-')[0].toUpperCase()}`
         }
+
+        // Auto-calculate totalInvoiceAmount
+        if (data?.deliveredItems && Array.isArray(data.deliveredItems)) {
+          const payload = req.payload
+          let total = 0
+
+          for (const item of data.deliveredItems) {
+            if (item.product && item.quantity) {
+              const product = await payload.findByID({
+                collection: 'products',
+                id: item.product,
+              })
+
+              const unitPrice = product?.sellingPrice || 0
+              const quantity = item.quantity || 0
+              const itemTotal = unitPrice * quantity
+
+              item.unitPrice = unitPrice
+              item.totalPrice = itemTotal
+
+              total += itemTotal
+            }
+          }
+
+          data.totalInvoiceAmount = total
+        }
+
         return data
       },
     ],
@@ -120,6 +148,7 @@ const Trips: CollectionConfig = {
     {
       name: 'deliveredItems',
       type: 'array',
+      label: 'Delivered Items',
       fields: [
         {
           name: 'product',
@@ -131,6 +160,41 @@ const Trips: CollectionConfig = {
           name: 'quantity',
           type: 'number',
           required: true,
+        },
+        {
+          name: 'unitPrice',
+          type: 'number',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'totalPrice',
+          type: 'number',
+          admin: { readOnly: true },
+        },
+      ],
+    },
+    {
+      name: 'totalInvoiceAmount',
+      type: 'number',
+      admin: { readOnly: true },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'invoice',
+          label: 'Related Invoice',
+          type: 'relationship',
+          relationTo: 'invoices',
+          required: false,
+        },
+        {
+          name: 'transactions',
+          label: 'Related Transactions',
+          type: 'relationship',
+          relationTo: 'transactions',
+          hasMany: true,
+          required: false,
         },
       ],
     },

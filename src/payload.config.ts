@@ -14,6 +14,8 @@ import Trips from './collections/Trips'
 import Expenses from './collections/Expenses'
 import Inventory from './collections/Inventory'
 import { Employees } from './collections/Employees'
+import Transactions from './collections/transactions'
+import Invoices from './collections/invoices'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -35,6 +37,8 @@ export default buildConfig({
     Trips,
     Expenses,
     Inventory,
+    Transactions,
+    Invoices,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
