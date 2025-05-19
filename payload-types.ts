@@ -76,6 +76,8 @@ export interface Config {
     trips: Trip;
     expenses: Expense;
     inventory: Inventory;
+    transactions: Transaction;
+    invoices: Invoice;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -91,6 +93,8 @@ export interface Config {
     trips: TripsSelect<false> | TripsSelect<true>;
     expenses: ExpensesSelect<false> | ExpensesSelect<true>;
     inventory: InventorySelect<false> | InventorySelect<true>;
+    transactions: TransactionsSelect<false> | TransactionsSelect<true>;
+    invoices: InvoicesSelect<false> | InvoicesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -285,6 +289,48 @@ export interface Inventory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "transactions".
+ */
+export interface Transaction {
+  id: string;
+  referenceId: string;
+  trip: string | Trip;
+  product: string | Product;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  dealer: string | Dealer;
+  transactionDate: string;
+  status: 'unpaid' | 'paid' | 'partial';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices".
+ */
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  trip: string | Trip;
+  dealer: string | Dealer;
+  invoiceDate: string;
+  items?:
+    | {
+        product: string | Product;
+        quantity: number;
+        unitPrice: number;
+        totalPrice: number;
+        id?: string | null;
+      }[]
+    | null;
+  totalAmount: number;
+  status: 'unpaid' | 'paid' | 'partial';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -325,6 +371,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'inventory';
         value: string | Inventory;
+      } | null)
+    | ({
+        relationTo: 'transactions';
+        value: string | Transaction;
+      } | null)
+    | ({
+        relationTo: 'invoices';
+        value: string | Invoice;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -511,6 +565,46 @@ export interface InventorySelect<T extends boolean = true> {
         reason?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "transactions_select".
+ */
+export interface TransactionsSelect<T extends boolean = true> {
+  referenceId?: T;
+  trip?: T;
+  product?: T;
+  quantity?: T;
+  unitPrice?: T;
+  totalPrice?: T;
+  dealer?: T;
+  transactionDate?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices_select".
+ */
+export interface InvoicesSelect<T extends boolean = true> {
+  invoiceNumber?: T;
+  trip?: T;
+  dealer?: T;
+  invoiceDate?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        unitPrice?: T;
+        totalPrice?: T;
+        id?: T;
+      };
+  totalAmount?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
