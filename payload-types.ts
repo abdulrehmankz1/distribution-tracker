@@ -244,10 +244,57 @@ export interface Trip {
     | {
         product: string | Product;
         quantity: number;
+        unitPrice?: number | null;
+        totalPrice?: number | null;
         id?: string | null;
       }[]
     | null;
+  totalInvoiceAmount?: number | null;
+  invoice?: (string | null) | Invoice;
+  transactions?: (string | Transaction)[] | null;
   notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices".
+ */
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  trip: string | Trip;
+  dealer: string | Dealer;
+  invoiceDate: string;
+  items?:
+    | {
+        product: string | Product;
+        quantity: number;
+        unitPrice: number;
+        totalPrice: number;
+        id?: string | null;
+      }[]
+    | null;
+  totalAmount: number;
+  status: 'unpaid' | 'paid' | 'partial';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "transactions".
+ */
+export interface Transaction {
+  id: string;
+  referenceId: string;
+  trip: string | Trip;
+  product: string | Product;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  dealer: string | Dealer;
+  transactionDate: string;
+  status: 'unpaid' | 'paid' | 'partial';
   updatedAt: string;
   createdAt: string;
 }
@@ -284,48 +331,6 @@ export interface Inventory {
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "transactions".
- */
-export interface Transaction {
-  id: string;
-  referenceId: string;
-  trip: string | Trip;
-  product: string | Product;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-  dealer: string | Dealer;
-  transactionDate: string;
-  status: 'unpaid' | 'paid' | 'partial';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "invoices".
- */
-export interface Invoice {
-  id: string;
-  invoiceNumber: string;
-  trip: string | Trip;
-  dealer: string | Dealer;
-  invoiceDate: string;
-  items?:
-    | {
-        product: string | Product;
-        quantity: number;
-        unitPrice: number;
-        totalPrice: number;
-        id?: string | null;
-      }[]
-    | null;
-  totalAmount: number;
-  status: 'unpaid' | 'paid' | 'partial';
   updatedAt: string;
   createdAt: string;
 }
@@ -528,8 +533,13 @@ export interface TripsSelect<T extends boolean = true> {
     | {
         product?: T;
         quantity?: T;
+        unitPrice?: T;
+        totalPrice?: T;
         id?: T;
       };
+  totalInvoiceAmount?: T;
+  invoice?: T;
+  transactions?: T;
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
