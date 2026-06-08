@@ -7,13 +7,14 @@ import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import Products from './collections/Products'
-import Dealers from './collections/Dealers'
-import Vehicles from './collections/Vehicles'
-import Trips from './collections/Trips'
-import Expenses from './collections/Expenses'
-import Inventory from './collections/Inventory'
+import { Products } from './collections/Products'
+import { Dealers } from './collections/Dealers'
+import { Vehicles } from './collections/Vehicles'
+import { Trips } from './collections/Trips'
+import { Expenses } from './collections/Expenses'
+import { Inventory } from './collections/Inventory'
 import { Employees } from './collections/Employees'
+import { Invoices } from './collections/Invoices'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,19 +25,32 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      title: 'Distribution Tracker',
+      description: 'Manage products, dealers, trips, inventory, invoices and expenses.',
+    },
   },
   collections: [
-    Users,
-    Media,
+    // Catalog
     Products,
-    Dealers,
-    Vehicles,
-    Employees,
+    // Operations
     Trips,
-    Expenses,
+    Vehicles,
     Inventory,
+    // Finance
+    Invoices,
+    Expenses,
+    // People
+    Dealers,
+    Employees,
+    Users,
+    // System
+    Media,
   ],
   editor: lexicalEditor(),
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
   secret: process.env.PAYLOAD_SECRET || '',
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',

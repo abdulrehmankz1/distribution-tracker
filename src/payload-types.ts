@@ -67,30 +67,32 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    products: Product;
+    trips: Trip;
+    vehicles: Vehicle;
+    inventory: Inventory;
+    invoices: Invoice;
+    expenses: Expense;
+    dealers: Dealer;
+    employees: Employee;
     users: User;
     media: Media;
-    products: Product;
-    dealers: Dealer;
-    drivers: Driver;
-    vehicles: Vehicle;
-    trips: Trip;
-    expenses: Expense;
-    inventory: Inventory;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {};
   collectionsSelect: {
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    trips: TripsSelect<false> | TripsSelect<true>;
+    vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
+    inventory: InventorySelect<false> | InventorySelect<true>;
+    invoices: InvoicesSelect<false> | InvoicesSelect<true>;
+    expenses: ExpensesSelect<false> | ExpensesSelect<true>;
+    dealers: DealersSelect<false> | DealersSelect<true>;
+    employees: EmployeesSelect<false> | EmployeesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    products: ProductsSelect<false> | ProductsSelect<true>;
-    dealers: DealersSelect<false> | DealersSelect<true>;
-    drivers: DriversSelect<false> | DriversSelect<true>;
-    vehicles: VehiclesSelect<false> | VehiclesSelect<true>;
-    trips: TripsSelect<false> | TripsSelect<true>;
-    expenses: ExpensesSelect<false> | ExpensesSelect<true>;
-    inventory: InventorySelect<false> | InventorySelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -129,10 +131,180 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  productName: string;
+  sku?: string | null;
+  category?: string | null;
+  unit: 'cartons' | 'kg' | 'litres' | 'pieces';
+  costPrice: number;
+  sellingPrice: number;
+  expiryDate?: string | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "trips".
+ */
+export interface Trip {
+  id: string;
+  tripId?: string | null;
+  date: string;
+  /**
+   * Marking a trip "Complete" deducts delivered items from inventory.
+   */
+  tripStatus: 'pending' | 'in_progress' | 'complete';
+  fromLocation: string;
+  toLocation: string | Dealer;
+  driver: string | Employee;
+  helper?: (string | null) | Employee;
+  vehicleType: 'Bike' | 'Suzuki' | 'Mazda' | 'Truck' | 'Loader Rickshaw' | 'Other';
+  vehicle?: (string | null) | Vehicle;
+  deliveredItems?:
+    | {
+        product: string | Product;
+        quantity: number;
+        id?: string | null;
+      }[]
+    | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "dealers".
+ */
+export interface Dealer {
+  id: string;
+  name: string;
+  address: string;
+  contactPerson?: string | null;
+  phone: string;
+  area?: string | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees".
+ */
+export interface Employee {
+  id: string;
+  name: string;
+  cnic: string;
+  phone: string;
+  role: 'driver' | 'helper' | 'data_entry' | 'office_boy' | 'admin' | 'other';
+  address?: string | null;
+  joiningDate?: string | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vehicles".
+ */
+export interface Vehicle {
+  id: string;
+  vehicleNumber: string;
+  vehicleType: 'Bike' | 'Suzuki' | 'Mazda' | 'Truck' | 'Loader Rickshaw' | 'Other';
+  fuelType?: ('Petrol' | 'Diesel' | 'CNG' | 'Electric') | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inventory".
+ */
+export interface Inventory {
+  id: string;
+  product: string | Product;
+  totalQuantity: number;
+  availableQuantity: number;
+  /**
+   * Low-stock alert triggers when available ≤ this value.
+   */
+  reorderLevel?: number | null;
+  /**
+   * Auto-generated audit trail of stock in/out movements.
+   */
+  movementLogs?:
+    | {
+        type: 'In' | 'Out';
+        quantity: number;
+        date: string;
+        reason?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices".
+ */
+export interface Invoice {
+  id: string;
+  invoiceNumber?: string | null;
+  invoiceDate: string;
+  dealer: string | Dealer;
+  trip?: (string | null) | Trip;
+  products?:
+    | {
+        product: string | Product;
+        quantity: number;
+        pricePerUnit: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Auto-calculated from line items.
+   */
+  totalAmount?: number | null;
+  paymentReceived: number;
+  /**
+   * Total − payment received.
+   */
+  balanceDue?: number | null;
+  paymentStatus?: ('unpaid' | 'partial' | 'paid') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "expenses".
+ */
+export interface Expense {
+  id: string;
+  expenseType: 'Fuel' | 'Toll Tax' | 'Driver Allowance' | 'Maintenance' | 'Misc' | 'Electricity' | 'Branch Expense';
+  amount: number;
+  date: string;
+  trip?: (string | null) | Trip;
+  branchName?: string | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: string;
+  name?: string | null;
+  /**
+   * Controls what this user can see and do across the system.
+   */
+  role: 'admin' | 'manager' | 'dataEntry' | 'viewer';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -165,132 +337,43 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
- */
-export interface Product {
-  id: string;
-  productName: string;
-  category?: string | null;
-  quantity: number;
-  unit: 'cartons' | 'kg' | 'litres';
-  costPrice: number;
-  sellingPrice: number;
-  expiryDate?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "dealers".
- */
-export interface Dealer {
-  id: string;
-  name: string;
-  address: string;
-  contactPerson?: string | null;
-  phone: string;
-  area?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drivers".
- */
-export interface Driver {
-  id: string;
-  name: string;
-  cnic?: string | null;
-  phone: string;
-  vehicleNumber?: string | null;
-  vehicleType?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "vehicles".
- */
-export interface Vehicle {
-  id: string;
-  vehicleNumber: string;
-  vehicleType: 'Suzuki' | 'Mazda' | 'Truck' | 'Other';
-  fuelType?: ('Petrol' | 'Diesel' | 'CNG') | null;
-  average: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "trips".
- */
-export interface Trip {
-  id: string;
-  tripId: string;
-  date: string;
-  driver: string | Driver;
-  helper?: (string | null) | Driver;
-  vehicle: string | Vehicle;
-  fromLocation: string;
-  toLocation: string | Dealer;
-  deliveredItems?:
-    | {
-        product: string | Product;
-        quantity: number;
-        id?: string | null;
-      }[]
-    | null;
-  startTime?: string | null;
-  endTime?: string | null;
-  kmStart?: number | null;
-  kmEnd?: number | null;
-  notes?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "expenses".
- */
-export interface Expense {
-  id: string;
-  expenseType: 'Fuel' | 'Toll Tax' | 'Driver Allowance' | 'Maintenance' | 'Misc' | 'Electricity' | 'Branch Expense';
-  amount: number;
-  date: string;
-  trip?: (string | null) | Trip;
-  branchName?: string | null;
-  notes?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "inventory".
- */
-export interface Inventory {
-  id: string;
-  product: string | Product;
-  totalQuantity: number;
-  availableQuantity: number;
-  movementLogs?:
-    | {
-        type: 'In' | 'Out';
-        quantity: number;
-        date: string;
-        reason?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: string;
   document?:
+    | ({
+        relationTo: 'products';
+        value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'trips';
+        value: string | Trip;
+      } | null)
+    | ({
+        relationTo: 'vehicles';
+        value: string | Vehicle;
+      } | null)
+    | ({
+        relationTo: 'inventory';
+        value: string | Inventory;
+      } | null)
+    | ({
+        relationTo: 'invoices';
+        value: string | Invoice;
+      } | null)
+    | ({
+        relationTo: 'expenses';
+        value: string | Expense;
+      } | null)
+    | ({
+        relationTo: 'dealers';
+        value: string | Dealer;
+      } | null)
+    | ({
+        relationTo: 'employees';
+        value: string | Employee;
+      } | null)
     | ({
         relationTo: 'users';
         value: string | User;
@@ -298,34 +381,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
-      } | null)
-    | ({
-        relationTo: 'products';
-        value: string | Product;
-      } | null)
-    | ({
-        relationTo: 'dealers';
-        value: string | Dealer;
-      } | null)
-    | ({
-        relationTo: 'drivers';
-        value: string | Driver;
-      } | null)
-    | ({
-        relationTo: 'vehicles';
-        value: string | Vehicle;
-      } | null)
-    | ({
-        relationTo: 'trips';
-        value: string | Trip;
-      } | null)
-    | ({
-        relationTo: 'expenses';
-        value: string | Expense;
-      } | null)
-    | ({
-        relationTo: 'inventory';
-        value: string | Inventory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -371,9 +426,153 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  productName?: T;
+  sku?: T;
+  category?: T;
+  unit?: T;
+  costPrice?: T;
+  sellingPrice?: T;
+  expiryDate?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "trips_select".
+ */
+export interface TripsSelect<T extends boolean = true> {
+  tripId?: T;
+  date?: T;
+  tripStatus?: T;
+  fromLocation?: T;
+  toLocation?: T;
+  driver?: T;
+  helper?: T;
+  vehicleType?: T;
+  vehicle?: T;
+  deliveredItems?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "vehicles_select".
+ */
+export interface VehiclesSelect<T extends boolean = true> {
+  vehicleNumber?: T;
+  vehicleType?: T;
+  fuelType?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inventory_select".
+ */
+export interface InventorySelect<T extends boolean = true> {
+  product?: T;
+  totalQuantity?: T;
+  availableQuantity?: T;
+  reorderLevel?: T;
+  movementLogs?:
+    | T
+    | {
+        type?: T;
+        quantity?: T;
+        date?: T;
+        reason?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices_select".
+ */
+export interface InvoicesSelect<T extends boolean = true> {
+  invoiceNumber?: T;
+  invoiceDate?: T;
+  dealer?: T;
+  trip?: T;
+  products?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        pricePerUnit?: T;
+        id?: T;
+      };
+  totalAmount?: T;
+  paymentReceived?: T;
+  balanceDue?: T;
+  paymentStatus?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "expenses_select".
+ */
+export interface ExpensesSelect<T extends boolean = true> {
+  expenseType?: T;
+  amount?: T;
+  date?: T;
+  trip?: T;
+  branchName?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "dealers_select".
+ */
+export interface DealersSelect<T extends boolean = true> {
+  name?: T;
+  address?: T;
+  contactPerson?: T;
+  phone?: T;
+  area?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees_select".
+ */
+export interface EmployeesSelect<T extends boolean = true> {
+  name?: T;
+  cnic?: T;
+  phone?: T;
+  role?: T;
+  address?: T;
+  joiningDate?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -401,120 +600,6 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
- */
-export interface ProductsSelect<T extends boolean = true> {
-  productName?: T;
-  category?: T;
-  quantity?: T;
-  unit?: T;
-  costPrice?: T;
-  sellingPrice?: T;
-  expiryDate?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "dealers_select".
- */
-export interface DealersSelect<T extends boolean = true> {
-  name?: T;
-  address?: T;
-  contactPerson?: T;
-  phone?: T;
-  area?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "drivers_select".
- */
-export interface DriversSelect<T extends boolean = true> {
-  name?: T;
-  cnic?: T;
-  phone?: T;
-  vehicleNumber?: T;
-  vehicleType?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "vehicles_select".
- */
-export interface VehiclesSelect<T extends boolean = true> {
-  vehicleNumber?: T;
-  vehicleType?: T;
-  fuelType?: T;
-  average?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "trips_select".
- */
-export interface TripsSelect<T extends boolean = true> {
-  tripId?: T;
-  date?: T;
-  driver?: T;
-  helper?: T;
-  vehicle?: T;
-  fromLocation?: T;
-  toLocation?: T;
-  deliveredItems?:
-    | T
-    | {
-        product?: T;
-        quantity?: T;
-        id?: T;
-      };
-  startTime?: T;
-  endTime?: T;
-  kmStart?: T;
-  kmEnd?: T;
-  notes?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "expenses_select".
- */
-export interface ExpensesSelect<T extends boolean = true> {
-  expenseType?: T;
-  amount?: T;
-  date?: T;
-  trip?: T;
-  branchName?: T;
-  notes?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "inventory_select".
- */
-export interface InventorySelect<T extends boolean = true> {
-  product?: T;
-  totalQuantity?: T;
-  availableQuantity?: T;
-  movementLogs?:
-    | T
-    | {
-        type?: T;
-        quantity?: T;
-        date?: T;
-        reason?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
