@@ -1,79 +1,126 @@
 # Distribution Tracker
 
-Distribution Tracker is a logistics and distribution management application built with Payload CMS and Next.js. It helps manage trips, vehicles, employees, dealers, products, and related entities to streamline distribution operations.
+A production-ready distribution & logistics management system built with **Payload CMS 3**,
+**Next.js 15** and **MongoDB**. It helps a distribution business manage products, dealers,
+delivery trips, live inventory, invoices and expenses — with automation that keeps stock
+levels and dealer balances always in sync.
 
-## Repository
+## ✨ Features
 
-You can find the source code for this project at:  
-[https://github.com/abdulrehmankz1/distribution-tracker.git](https://github.com/abdulrehmankz1/distribution-tracker.git)
+- **Delivery trips** — assign drivers, helpers and vehicles; track status (pending →
+  in-progress → complete). Completing a trip **automatically deducts delivered items from
+  inventory** — and reverting or deleting a completed trip **returns them to stock**.
+- **Live inventory** — single source of truth for stock, kept in sync automatically, with a
+  movement audit trail and **low-stock alerts** (reorder levels).
+- **Invoices** — line items with **auto-calculated totals**, partial payments, and a
+  derived `balanceDue` / `paymentStatus` (unpaid / partial / paid).
+- **Dealers & employees** — manage your dealer network and staff (drivers, helpers, office
+  roles), with smart relationship filters (e.g. only drivers selectable as a trip driver).
+- **Expenses** — fuel, tolls, allowances, maintenance, branch costs — optionally linked to
+  trips.
+- **Role-based access control** — `admin`, `manager`, `dataEntry`, `viewer`. Sensitive
+  fields (e.g. product cost price) are hidden from lower roles; deletes are admin-only.
+- **Frontend** — a polished public landing page plus an authenticated **staff dashboard**
+  with KPIs, sales/expense charts, recent trips & invoices, top outstanding balances and
+  low-stock alerts.
 
-## Features
+## 🧱 Tech stack
 
-- Manage trips with status tracking (Pending, In Progress, Complete)
-- Assign drivers, helpers, and vehicles to trips
-- Track delivery locations and delivered items with quantities
-- Manage vehicles with types and fuel information
-- Manage employees, dealers, products, expenses, and inventory
-- Media management for uploads and assets
-- User authentication and admin panel access
+| Layer    | Tech |
+|----------|------|
+| CMS/API  | Payload CMS 3.33 |
+| Web      | Next.js 15 (App Router), React 19 |
+| Database | MongoDB (Mongoose adapter) |
+| UI       | Tailwind CSS v4, Recharts |
 
-## Quick Start
+## 🚀 Getting started
 
-This project can be deployed directly from Payload Cloud hosting, which sets up MongoDB and cloud S3 object storage for media.
+### 1. Prerequisites
+- Node.js `>= 20.9`
+- pnpm `>= 9`
+- MongoDB (locally, or via the bundled Docker Compose)
 
-### Local Setup
+### 2. Environment
+```bash
+cp .env.example .env
+# then set a unique PAYLOAD_SECRET:
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/abdulrehmankz1/distribution-tracker.git
-   cd distribution-tracker
-   ```
+### 3. Database (option A — Docker)
+```bash
+docker compose up -d mongo   # MongoDB on localhost:27017
+```
+Or point `DATABASE_URI` at any MongoDB instance (e.g. Atlas).
 
-2. Copy the example environment variables and update:
-   ```bash
-   cp .env.example .env
-   ```
-   Add your `MONGODB_URI` from your cloud project to the `.env` file.
+### 4. Install & run
+```bash
+pnpm install
+pnpm seed     # optional: load demo data
+pnpm dev
+```
 
-3. Install dependencies and start the development server:
-   ```bash
-   pnpm install
-   pnpm dev
-   ```
+- Frontend: http://localhost:3000
+- Admin panel: http://localhost:3000/admin
+- Dashboard: http://localhost:3000/dashboard
 
-4. Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
+### Demo login (after `pnpm seed`)
+| Role    | Email             | Password      |
+|---------|-------------------|---------------|
+| Admin   | admin@demo.com    | password123   |
+| Manager | manager@demo.com  | password123   |
+| Viewer  | viewer@demo.com   | password123   |
 
-5. Follow the on-screen instructions to log in and create your first admin user.
+> If you don't seed, the first time you open `/admin` Payload lets you create the first
+> admin user.
 
-### Docker (Optional)
+## 📁 Project structure
 
-If you prefer to use Docker for local development instead of a local MongoDB instance:
+```
+src/
+  access/        Role-based access helpers (isAdmin, canEdit, field-level, …)
+  app/(frontend) Landing page, login, and the staff dashboard
+  app/(payload)  Payload admin & API routes
+  collections/   Data models (Products, Trips, Inventory, Invoices, …)
+  components/     Dashboard UI (KpiCard, StatusBadge, Charts)
+  lib/           Business logic (inventory adjustments, dashboard reports, formatting)
+  scripts/       One-off admin scripts (e.g. password reset)
+  seed.ts        Demo data seeder
+  payload.config.ts
+```
 
-- Modify the `MONGODB_URI` in your `.env` file to:
-  ```
-  mongodb://127.0.0.1/<dbname>
-  ```
-- Update the `docker-compose.yml` file's `MONGODB_URI` to match the above `<dbname>`.
-- Run the following command to start the database:
-  ```bash
-  docker-compose up
-  ```
-  Add `-d` to run in the background.
+## 🔑 Key automation
 
-## How It Works
+- **`src/collections/Invoices.ts`** — `beforeChange` hook computes `totalAmount`,
+  `balanceDue` and `paymentStatus` from line items.
+- **`src/collections/Trips.ts`** — `afterChange` / `afterDelete` hooks reconcile inventory:
+  completing a trip deducts delivered items, while reverting or deleting it returns them —
+  every change logged to the movement trail.
+- **`src/lib/inventory.ts`** — `adjustStock()` helper (single source of truth for stock
+  changes).
+- **`src/lib/reports.ts`** — dashboard aggregation; uses DB-side counts, `where` filters and
+  a rolling 6-month window so it never loads entire collections.
 
-The app is built using Payload CMS with pre-configured collections tailored for distribution tracking:
+## 📜 Scripts
 
-- **Trips**: Manage trip details including trip ID, date, status, assigned driver/helper, vehicle, origin, destination, delivered items, and notes.
-- **Vehicles**: Manage vehicle details such as vehicle number, type (Bike, Suzuki, Mazda, Truck, Loader Rickshaw, Other), and fuel type (Petrol, Diesel, CNG, Electric).
-- **Employees**: Manage employees with roles such as drivers and helpers.
-- **Dealers**: Manage dealer information for delivery destinations.
-- **Products**: Manage products to be delivered.
-- **Expenses, Inventory, Media, Users**: Additional collections to support app functionality.
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start the dev server |
+| `pnpm build` / `pnpm start` | Production build & start |
+| `pnpm seed` | Load demo data |
+| `pnpm reset-password` | List users / reset a password without email |
+| `pnpm generate:types` | Regenerate `payload-types.ts` |
+| `pnpm lint` | Lint |
 
-## Questions
+### Forgot your password? (no email adapter in dev)
 
-If you have any issues or questions, reach out on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+```bash
+# list users
+pnpm reset-password
+# reset one
+RESET_EMAIL=admin@demo.com RESET_PASSWORD=newpass123 pnpm reset-password
+```
+
+## License
+
+MIT
