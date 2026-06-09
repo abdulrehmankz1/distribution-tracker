@@ -24,6 +24,52 @@ levels and dealer balances always in sync.
   with KPIs, sales/expense charts, recent trips & invoices, top outstanding balances and
   low-stock alerts.
 
+## 🎬 Demo — adding a trip (end-to-end)
+
+A full walkthrough: sign in to the **admin panel**, create a delivery trip (assign driver,
+helper, vehicle and delivered items), save it — then log in to the **staff site** and see it
+reflected live on the dashboard.
+
+<video src="docs/videos/add-trip-walkthrough.mp4" controls muted width="100%"></video>
+
+> ▶ If the video doesn't play inline on GitHub, [download / open the walkthrough here](docs/videos/add-trip-walkthrough.mp4).
+
+**Result** — the new trip (`Al-Madina Store`, _Complete_) immediately appears at the top of
+**Recent trips** on the dashboard, and completing it deducts the delivered stock:
+
+![Dashboard right after adding the trip](docs/videos/dashboard-after-add.png)
+
+## 📸 Screenshots
+
+### Landing page
+The public marketing page — explains what the product does at a glance.
+
+![Landing page](docs/screenshots/01-landing.png)
+
+### Staff dashboard
+Logged-in overview: KPI cards (trips, receivables, sales, expenses, low-stock), a 6-month
+sales chart, expenses-by-type breakdown, recent trips & invoices, top outstanding dealer
+balances and low-stock alerts.
+
+![Staff dashboard](docs/screenshots/03-dashboard.png)
+
+### Sign in
+Staff log in with their role-based account to reach the dashboard and admin panel.
+
+![Login page](docs/screenshots/02-login.png)
+
+### Admin panel
+The Payload CMS admin, where everything is managed — Products, Trips, Vehicles,
+Inventories, Invoices, Expenses, Dealers, Employees and Users — grouped by area.
+
+![Admin panel](docs/screenshots/04-admin.png)
+
+### Managing records (Trips)
+Every collection gets a searchable, filterable list view. Completing a trip here
+automatically deducts the delivered items from inventory.
+
+![Trips collection](docs/screenshots/05-admin-trips.png)
+
 ## 🧱 Tech stack
 
 | Layer    | Tech |
