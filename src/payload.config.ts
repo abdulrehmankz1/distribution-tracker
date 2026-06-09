@@ -54,6 +54,8 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
+    // free-tier Atlas keeps throwing NoSuchTransaction, so turn txns off
+    transactionOptions: false,
   }),
   plugins: [payloadCloudPlugin()],
 })
