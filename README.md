@@ -24,51 +24,34 @@ levels and dealer balances always in sync.
   with KPIs, sales/expense charts, recent trips & invoices, top outstanding balances and
   low-stock alerts.
 
-## 🎬 Demo — adding a trip (end-to-end)
+## 🎬 Demo
 
-A full walkthrough: sign in to the **admin panel**, create a delivery trip (assign driver,
-helper, vehicle and delivered items), save it — then log in to the **staff site** and see it
-reflected live on the dashboard.
+Adding a delivery trip end-to-end — create it in the admin panel, then watch it appear live
+on the staff dashboard while stock auto-adjusts:
 
-<video src="docs/videos/add-trip-walkthrough.mp4" controls muted width="100%"></video>
+<img src="docs/videos/add-trip-walkthrough.gif" alt="Adding a trip — end-to-end walkthrough" width="760">
 
-> ▶ If the video doesn't play inline on GitHub, [download / open the walkthrough here](docs/videos/add-trip-walkthrough.mp4).
+<sub>▶ Full quality: <a href="docs/videos/add-trip-walkthrough.mp4">watch the MP4</a></sub>
 
-**Result** — the new trip (`Al-Madina Store`, _Complete_) immediately appears at the top of
-**Recent trips** on the dashboard, and completing it deducts the delivered stock:
+<details>
+<summary>📸 More screenshots</summary>
 
-![Dashboard right after adding the trip](docs/videos/dashboard-after-add.png)
+<table>
+  <tr>
+    <td align="center"><b>Landing page</b><br><img src="docs/screenshots/01-landing.png" width="400"></td>
+    <td align="center"><b>Staff dashboard</b><br><img src="docs/screenshots/03-dashboard.png" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Sign in</b><br><img src="docs/screenshots/02-login.png" width="400"></td>
+    <td align="center"><b>Admin panel</b><br><img src="docs/screenshots/04-admin.png" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Trips list</b><br><img src="docs/screenshots/05-admin-trips.png" width="400"></td>
+    <td align="center"><b>Dashboard after adding a trip</b><br><img src="docs/videos/dashboard-after-add.png" width="400"></td>
+  </tr>
+</table>
 
-## 📸 Screenshots
-
-### Landing page
-The public marketing page — explains what the product does at a glance.
-
-![Landing page](docs/screenshots/01-landing.png)
-
-### Staff dashboard
-Logged-in overview: KPI cards (trips, receivables, sales, expenses, low-stock), a 6-month
-sales chart, expenses-by-type breakdown, recent trips & invoices, top outstanding dealer
-balances and low-stock alerts.
-
-![Staff dashboard](docs/screenshots/03-dashboard.png)
-
-### Sign in
-Staff log in with their role-based account to reach the dashboard and admin panel.
-
-![Login page](docs/screenshots/02-login.png)
-
-### Admin panel
-The Payload CMS admin, where everything is managed — Products, Trips, Vehicles,
-Inventories, Invoices, Expenses, Dealers, Employees and Users — grouped by area.
-
-![Admin panel](docs/screenshots/04-admin.png)
-
-### Managing records (Trips)
-Every collection gets a searchable, filterable list view. Completing a trip here
-automatically deducts the delivered items from inventory.
-
-![Trips collection](docs/screenshots/05-admin-trips.png)
+</details>
 
 ## 🧱 Tech stack
 
