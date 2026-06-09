@@ -29,7 +29,7 @@ levels and dealer balances always in sync.
 Adding a delivery trip end-to-end — create it in the admin panel, then watch it appear live
 on the staff dashboard while stock auto-adjusts:
 
-<img src="docs/videos/add-trip-walkthrough.gif" alt="Adding a trip — end-to-end walkthrough" width="760">
+<img src="docs/videos/add-trip-walkthrough.gif" alt="Adding a trip — end-to-end walkthrough" width="640">
 
 <sub>▶ Full quality: <a href="docs/videos/add-trip-walkthrough.mp4">watch the MP4</a></sub>
 
