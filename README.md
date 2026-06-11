@@ -1,9 +1,16 @@
 # Distribution Tracker
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/abdulrehmankz1/distribution-tracker?style=social)](https://github.com/abdulrehmankz1/distribution-tracker/stargazers)
+[![Forks](https://img.shields.io/github/forks/abdulrehmankz1/distribution-tracker?style=social)](https://github.com/abdulrehmankz1/distribution-tracker/network/members)
+
 A production-ready distribution & logistics management system built with **Payload CMS 3**,
 **Next.js 15** and **MongoDB**. It helps a distribution business manage products, dealers,
 delivery trips, live inventory, invoices and expenses — with automation that keeps stock
 levels and dealer balances always in sync.
+
+> ⭐ **Like this project?** Give it a star and feel free to fork it — it really helps and
+> keeps the project going!
 
 ## ✨ Features
 
@@ -150,6 +157,32 @@ pnpm reset-password
 RESET_EMAIL=admin@demo.com RESET_PASSWORD=newpass123 pnpm reset-password
 ```
 
-## License
+## 🤝 Contributing
 
-MIT
+Contributions, issues and feature requests are welcome! The usual open-source flow:
+
+1. **Fork** the repository — <https://github.com/abdulrehmankz1/distribution-tracker>
+2. Create your feature branch — `git checkout -b feature/amazing-feature`
+3. Commit your changes — `git commit -m "feat: add amazing feature"`
+4. Push to the branch — `git push origin feature/amazing-feature`
+5. Open a **Pull Request**
+
+If you find this project useful, please ⭐ **star the repo** and consider **forking** it — it
+helps others discover the project and motivates further development.
+
+## 🙌 Credits & Attribution
+
+Built and maintained by **Abdul Rehman** ([@abdulrehmankz1](https://github.com/abdulrehmankz1)).
+
+You are free to use, modify and distribute this project under the terms of the MIT License.
+If you use it in your own work — whether a fork, a derivative, or as a learning reference —
+**please give credit** by linking back to the original repository:
+
+> Based on [Distribution Tracker](https://github.com/abdulrehmankz1/distribution-tracker)
+> by [Abdul Rehman](https://github.com/abdulrehmankz1).
+
+## 📜 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for
+details. You can use it commercially and privately, modify it and distribute it; just keep
+the copyright and license notice intact.
